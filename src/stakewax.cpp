@@ -6,11 +6,14 @@ uint64_t getTime(){
 }
 
 void requireWhitelist(name from){
-  check((from == "wax.tycoon"_n || 
+  check((from == "wax.tycoon"_n ||
     from == "gpk.topps"_n ||
-    from == "market.place"_n || 
+    from == "market.place"_n ||
     from == "bhiyveuahwmz"_n ||
-    from == "res.pink"_n 
+    from == "res.pink"_n ||
+    from == "shatner"_n ||
+    from == "unbox.heroes"_n ||
+    from == "4tioi.waa"_n
     ), "dapp not whitelisted.");
 }
 
