@@ -17,6 +17,8 @@ Boost by running `boost(name from, name to, asset cpu, asset net)`:
 - cpu = How much (in WAX) gets staked to that account
 - net = How much (in WAX) gets staked to that account
 
+_Boosting an account that was already boosted will result in no additional boosting. **Update boosts** to modify a boost._
+
 ## Update Boosts
 Does someone have too much wax staked and is inactive? Update the amount they got boosted with `updateboost(name from, name to, asset cpu_to, asset net_to)` to update the amount of WAX staked to that account.
 
