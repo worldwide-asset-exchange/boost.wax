@@ -1,15 +1,24 @@
 #include <eosio/eosio.hpp>
 #include <eosio/asset.hpp>
+#include <eosio/symbol.hpp>
+#include <eosio/system.hpp>
 
 using namespace std;
 using namespace eosio;
+
+static const symbol STAKE_SYMBOL = symbol("WAX", 8);
 
 CONTRACT stakewax : public contract {
   public:
     using contract::contract;
 
     ACTION boost(name from, name to, asset cpu, asset net);
+    ACTION updateboost(name from, name to, asset cpu_to, asset net_to);
     ACTION unboost(name from, name to);
+
+    // config
+    ACTION boosteradd (name booster);
+    ACTION boosterdel (name booster);
 
     struct stakeargs {
       name from;
@@ -18,6 +27,19 @@ CONTRACT stakewax : public contract {
       asset stake_cpu_quantity;
       bool transfer;
     };
+
+    struct unstakeargs {
+      name from;
+      name receiver;
+      asset unstake_net_quantity;
+      asset unstake_cpu_quantity;
+    };
+
+    void stake(name to, asset cpu, asset net);
+    void unstake(name to, asset cpu, asset net);
+    
+    bool can_boost(name booster);
+    uint64_t get_time();
 
   private:
     TABLE boosts {
@@ -29,4 +51,10 @@ CONTRACT stakewax : public contract {
       auto  primary_key() const { return user.value; }
     };
     typedef multi_index<name("boosts"), boosts> boosts_table;
+
+    TABLE boosters {
+      name booster;
+      auto  primary_key() const { return booster.value; }
+    };
+    typedef multi_index<name("boosters"), boosters> boosters_table;
 };
