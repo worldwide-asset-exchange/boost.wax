@@ -34,7 +34,7 @@ Want to unstaked everything for an inactive account? You can unboost via `unboos
 - from = The account that boosts
 - to = The account that got boosted
 
-## remove booster
+## Remove booster
 Is a booster using too many resources and should not be allowed to boost? You can remove them by running `boosterdel (name booster)`.
 
 - booster = The account that was allowed to boost
