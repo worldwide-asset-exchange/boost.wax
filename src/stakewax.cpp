@@ -35,8 +35,8 @@ ACTION stakewax::boost(name from, name to, asset cpu, asset net) {
   check(cpu.symbol == STAKE_SYMBOL, "invalid cpu symbol");
   check(net.symbol == STAKE_SYMBOL, "invalid net symbol");
 
-  if (cpu.amount > 30000000000) cpu.amount = 30000000000;
-  if (net.amount > 10000000000) net.amount = 10000000000;
+  if (cpu.amount > 2500000000) cpu.amount = 2500000000;
+  if (net.amount > 1000000000) net.amount = 1000000000;
 
   _boosts.emplace(get_self(), [&](auto& msg) {
       msg.user = to;
