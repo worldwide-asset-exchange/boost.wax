@@ -1,19 +1,31 @@
-#include <stakewax.hpp>
+#include <booster.hpp>
 
-ACTION stakewax::boosteradd (name booster) {
-  require_auth(get_self());
+ACTION booster::reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user) {
+  require_auth(contract);
 
-  boosters_table _boosters(get_self(), get_self().value);
-
-  auto _booster = _boosters.find(booster.value);
-  check(_booster == _boosters.end(), "Booster already added");
-
-  _boosters.emplace(get_self(), [&](auto &row) {
-    row.booster = booster;
-  });
+  contracts_table _contracts(get_self(), get_self().value);
+  auto itr = _contracts.find(contract.value);
+  if(itr == _contracts.end()) {
+    _contracts.emplace(contract, [&](auto& row) {
+      row.contract = contract;
+      row.cpu_us_per_user = cpu_us_per_user;
+      row.net_words_per_user = net_words_per_user;
+    });
+  } else {
+    _contracts.modify(itr, contract, [&](auto &rec) {
+      rec.cpu_us_per_user = cpu_us_per_user;
+      rec.net_words_per_user = net_words_per_user;
+    });    
+  }
 }
 
-ACTION stakewax::boosterdel (name booster) {
+ACTION booster::dereg(name contract) {
+  contracts_table _contracts(get_self(), get_self().value);
+  auto _contract = _contracts.require_find(contract.value, "contract not found");
+  _contracts.erase(_contract);
+}
+
+ACTION booster::boosterdel (name booster) {
   require_auth(get_self());
 
   boosters_table _boosters(get_self(), get_self().value);
@@ -22,7 +34,7 @@ ACTION stakewax::boosterdel (name booster) {
   _boosters.erase(_booster);
 }
 
-ACTION stakewax::boost(name from, name to, asset cpu, asset net) {
+ACTION booster::boost(name from, name to, asset cpu, asset net) {
   if (!can_boost(from)) return;
 
   boosts_table _boosts(get_self(), get_self().value);
@@ -49,7 +61,7 @@ ACTION stakewax::boost(name from, name to, asset cpu, asset net) {
   stake(to, cpu, net);
 }
 
-ACTION stakewax::unboost(name from, name to) {
+ACTION booster::unboost(name from, name to) {
   if (!can_boost(from)) return;
 
   boosts_table _boosts(get_self(), get_self().value);
@@ -60,7 +72,7 @@ ACTION stakewax::unboost(name from, name to) {
   _boosts.erase(itr);
 }
 
-ACTION stakewax::updateboost(name from, name to, asset cpu_to, asset net_to) {
+ACTION booster::updateboost(name from, name to, asset cpu_to, asset net_to) {
   if (!can_boost(from)) return;
 
   boosts_table _boosts(get_self(), get_self().value);
@@ -108,7 +120,7 @@ ACTION stakewax::updateboost(name from, name to, asset cpu_to, asset net_to) {
   });
 }
 
-void stakewax::stake(name to, asset cpu, asset net) {
+void booster::stake(name to, asset cpu, asset net) {
   stakeargs args;
 
   args.from = get_self();
@@ -126,7 +138,7 @@ void stakewax::stake(name to, asset cpu, asset net) {
   issueAction.send();
 }
 
-void stakewax::unstake(name to, asset cpu, asset net) {
+void booster::unstake(name to, asset cpu, asset net) {
   unstakeargs args;
 
   args.from = get_self();
@@ -143,15 +155,15 @@ void stakewax::unstake(name to, asset cpu, asset net) {
   issueAction.send();
 }
 
-bool stakewax::can_boost(name booster) {
+bool booster::can_boost(name booster) {
   require_auth(booster);
   boosters_table _boosters(get_self(), get_self().value);
   auto itr = _boosters.find(booster.value);
   return itr != _boosters.end();
 }
 
-uint64_t stakewax::get_time() {
+uint64_t booster::get_time() {
   return (int64_t) eosio::current_time_point().time_since_epoch().count() / 1000;
 }
 
-EOSIO_DISPATCH(stakewax, (boost)(unboost)(updateboost)(boosteradd)(boosterdel));
+EOSIO_DISPATCH(booster, (reg)(dereg)(noop)(boost)(unboost)(updateboost)(boosterdel));
