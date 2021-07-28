@@ -1,43 +1,30 @@
-# stakewax
+# boost.wax
 
-This contract boosts the cpu and net for a given account. It is meant to be used from the unboxing contracts to allow clients to perform unboxing without having resources beforehand
+This contract registers other contracts that wish to have WAX apply extended management over CPU and Net for their WAX Cloud Wallet users.
 
-Deployed to: `boost.wax` [> Account <](https://wax.bloks.io/account/boost.wax)
-
-
-## Setup
-Run `boosteradd (name booster)` from contract account to add accounts that can boost. 
-
-- booster = The account that will be allowed to boost.
-
-## Boosting
-Boost by running `boost(name from, name to, asset cpu, asset net)`:
-
-- from = The account that boosts
-- to = The account that gets boosted
-- cpu = How much (in WAX) gets staked to that account
-- net = How much (in WAX) gets staked to that account
-
-_Boosting an account that was already boosted will result in no additional boosting. **Update boosts** to modify a boost._
-
-## Update Boosts
-Does someone have too much wax staked and is inactive? Update the amount they got boosted with `updateboost(name from, name to, asset cpu_to, asset net_to)` to update the amount of WAX staked to that account.
-
-This will set the amount of WAX staked which means it will unstake / stake CPU and/or NET for that account to the new values.
-
-- from = The account that boosts
-- to = The account that gets boosted
-- cpu_to = How much (in WAX) gets staked to that account
-- net_to = How much (in WAX) gets staked to that account
+Deployed to: [boost.wax](https://wax.bloks.io/account/boost.wax)
 
 
-## Unboost
-Want to unstaked everything for an inactive account? You can unboost via `unboost(name from, name to)`
+## API
 
-- from = The account that boosts
-- to = The account that got boosted
+* **reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user)**
+   Register your contract for bandwidth management.  
+   `contract`: the contract account to register. Must also be the account calling this action.  
+   `cpu_us_per_user`: amount of cpu in microseconds to provide your users over a 24 hour period.  
+   `net_words_per_user`: amount of net in microseconds to provide your users over a 24 hour period.  
+    Note: your contract must have a permission called **paybw**, and it must be linked to the **boost.wax**#**noop** action. Furthermore, it must use the following public key: `EOS5B2c2wNjaq342758aYvE71dTxpBVqHocnRU1aWxUdZAuxbgM6f`. As an example see the [boost.wax@paybw permission](https://wax.bloks.io/account/boost.wax#keys). When the free tier is exceeded, the WAX backend will sign for your users using this permission if you have sufficient CPU and Net allocated to your contract's account.
+   
+* **dereg(name contract)**: 
+   Deregister your contract from bandwidth management.  
+   
+* **noop()**: 
+   No-op action inserted into WAX Cloud Wallet transactions that satisfy bandwidth management crtieria.  
 
-## Remove booster
-Is a booster using too many resources and should not be allowed to boost? You can remove them by running `boosterdel (name booster)`.
+* **boost(name from, name to, asset cpu, asset net)**: *Deprecated*
+* **updateboost(name from, name to, asset cpu_to, asset net_to)**: *Deprecated*
+* **unboost(name from, name to)**: *Deprecated*
+* **boosterdel (name booster)**: *Deprecated*
 
-- booster = The account that was allowed to boost
+## Bandwidth Management
+
+WAX will give every user 5ms of free CPU and 5000 words of free Net over a rolling 24 hour period. Also, all contracts are individually confined to a maximum of 50s of free bandwidth over a 24 hour period (this 50s quota will likely change as chain demand fluctuates). If either of those run out within the 24 hour period it will be up to the contract to pay for bandwidth (the purpose of this registration contract), and after that, it will be up to the user's own resources. By registering your contract here, permissioning it as described above, and adding CPU and Net to your contract, WAX will automatically begin signing noop transactions with your account so as to conveniently use your contract's CPU and Net to cover the cost for your users. Realize that WAX will only utilize your contract's resources once the free tier runs out for your user or your contract.

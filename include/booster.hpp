@@ -8,7 +8,7 @@ using namespace eosio;
 
 static const symbol STAKE_SYMBOL = symbol("WAX", 8);
 
-CONTRACT stakewax : public contract {
+CONTRACT booster : public contract {
   public:
     using contract::contract;
 
@@ -16,9 +16,13 @@ CONTRACT stakewax : public contract {
     ACTION updateboost(name from, name to, asset cpu_to, asset net_to);
     ACTION unboost(name from, name to);
 
-    // config
-    ACTION boosteradd (name booster);
+    // deprecated
     ACTION boosterdel (name booster);
+
+    ACTION reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user);
+    ACTION dereg(name contract);
+
+    ACTION noop() {};
 
     struct stakeargs {
       name from;
@@ -57,4 +61,12 @@ CONTRACT stakewax : public contract {
       auto  primary_key() const { return booster.value; }
     };
     typedef multi_index<name("boosters"), boosters> boosters_table;
+
+    TABLE contracts {
+      name      contract;
+      uint64_t  cpu_us_per_user;
+      uint64_t  net_words_per_user;
+      auto primary_key() const { return contract.value; }
+    };
+    typedef multi_index<name("contracts"), contracts> contracts_table;
 };
