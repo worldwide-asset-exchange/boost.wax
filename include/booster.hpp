@@ -19,7 +19,7 @@ CONTRACT booster : public contract {
     // deprecated
     ACTION boosterdel (name booster);
 
-    ACTION reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user);
+    ACTION reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user, bool use_allow_list, vector<name> allowed_contracts);
     ACTION dereg(name contract);
 
     ACTION noop() {};
@@ -63,9 +63,11 @@ CONTRACT booster : public contract {
     typedef multi_index<name("boosters"), boosters> boosters_table;
 
     TABLE contracts {
-      name      contract;
-      uint64_t  cpu_us_per_user;
-      uint64_t  net_words_per_user;
+      name          contract;
+      uint64_t      cpu_us_per_user;
+      uint64_t      net_words_per_user;
+      bool          use_allow_list;
+      vector<name>  allowed_contracts;
       auto primary_key() const { return contract.value; }
     };
     typedef multi_index<name("contracts"), contracts> contracts_table;

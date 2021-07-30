@@ -1,6 +1,6 @@
 #include <booster.hpp>
 
-ACTION booster::reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user) {
+ACTION booster::reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user, bool use_allow_list, vector<name> allowed_contracts) {
   require_auth(contract);
 
   contracts_table _contracts(get_self(), get_self().value);
@@ -10,11 +10,15 @@ ACTION booster::reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_
       row.contract = contract;
       row.cpu_us_per_user = cpu_us_per_user;
       row.net_words_per_user = net_words_per_user;
+      row.use_allow_list = use_allow_list;
+      row.allowed_contracts = allowed_contracts;
     });
   } else {
     _contracts.modify(itr, contract, [&](auto &rec) {
       rec.cpu_us_per_user = cpu_us_per_user;
       rec.net_words_per_user = net_words_per_user;
+      rec.use_allow_list = use_allow_list;
+      rec.allowed_contracts = allowed_contracts;
     });    
   }
 }
