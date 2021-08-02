@@ -39,30 +39,30 @@ ACTION booster::boosterdel (name booster) {
 }
 
 ACTION booster::boost(name from, name to, asset cpu, asset net) {
-  if (!can_boost(from)) return;
-
-  boosts_table _boosts(get_self(), get_self().value);
-  auto itr = _boosts.find(to.value);
-
-  if(itr != _boosts.end()) return;
-  
-  // not yet boosted
-
-  check(cpu.symbol == STAKE_SYMBOL, "invalid cpu symbol");
-  check(net.symbol == STAKE_SYMBOL, "invalid net symbol");
-
-  if (cpu.amount > 2500000000) cpu.amount = 2500000000;
-  if (net.amount > 1000000000) net.amount = 1000000000;
-
-  _boosts.emplace(get_self(), [&](auto& msg) {
-      msg.user = to;
-      msg.requester = from;
-      msg.amount_cpu = cpu;
-      msg.amount_net = net;
-      msg.time = get_time();
-  });
-
-  stake(to, cpu, net);
+  // if (!can_boost(from)) return;
+  // 
+  // boosts_table _boosts(get_self(), get_self().value);
+  // auto itr = _boosts.find(to.value);
+  // 
+  // if(itr != _boosts.end()) return;
+  // 
+  // // not yet boosted
+  // 
+  // check(cpu.symbol == STAKE_SYMBOL, "invalid cpu symbol");
+  // check(net.symbol == STAKE_SYMBOL, "invalid net symbol");
+  // 
+  // if (cpu.amount > 2500000000) cpu.amount = 2500000000;
+  // if (net.amount > 1000000000) net.amount = 1000000000;
+  // 
+  // _boosts.emplace(get_self(), [&](auto& msg) {
+  //     msg.user = to;
+  //     msg.requester = from;
+  //     msg.amount_cpu = cpu;
+  //     msg.amount_net = net;
+  //     msg.time = get_time();
+  // });
+  // 
+  // stake(to, cpu, net);
 }
 
 ACTION booster::unboost(name from, name to) {
