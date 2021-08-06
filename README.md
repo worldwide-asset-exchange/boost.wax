@@ -15,7 +15,7 @@ Deployed to: [boost.wax](https://wax.bloks.io/account/boost.wax)
    * `use_allow_list`: turn allow list enforcement on or off.
    * `allowed_contracts`: vector of contract name that are permitted to be in transactions accompanying your contract. Must have use_allow_list == true for these to be enforced. The idea is to prevent abuse by dapps that might sneak one of your contract actions into their transactions in order to take advantage of your bandwidth quota. By listing the cotnracts you accept in your contract's transactions, you will only pay with your own cpu+net if all transaction contracts are contained in this list.  
    
-    Note: your contract must have a permission called **paybw**, and it must be linked to the **boost.wax**#**noop** action. Furthermore, it must use the following public key: `EOS5B2c2wNjaq342758aYvE71dTxpBVqHocnRU1aWxUdZAuxbgM6f`. As an example see the [boost.wax@paybw permission](https://wax.bloks.io/account/boost.wax#keys). When the free tier is exceeded, the WAX backend will sign for your users using this permission if you have sufficient CPU and Net allocated to your contract's account.
+    Note: your contract must have a permission called **paybw**, and it must be linked to the **boost.wax**#**noop** action. Furthermore, it must have a 1 of 1 authority usuing the account@permission `boost.wax@paybw`. As an example see the [test.wax@paybw permission](https://wax.bloks.io/account/test.wax#keys). When the free tier is exceeded, the WAX backend will sign for your users using this permission if you have sufficient CPU and Net allocated to your contract's account.
    
 * **dereg(name contract)**: 
    Deregister your contract from bandwidth management.  
