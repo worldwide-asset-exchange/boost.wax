@@ -7,7 +7,7 @@ Deployed to: [boost.wax](https://wax.bloks.io/account/boost.wax)
 
 ## API
 
-* **reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user, bool use_allow_list, vector<name> allowed_contracts)**
+* **[reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_per_user, bool use_allow_list, vector<name> allowed_contracts)](https://wax.bloks.io/account/boost.wax?loadContract=true&tab=Actions&account=boost.wax&scope=boost.wax&limit=100&action=reg)**
    Register your contract for bandwidth management.  
    * `contract`: the contract account to register. Must also be the account calling this action.  
    * `cpu_us_per_user`: amount of cpu in microseconds to provide your users over a 24 hour period.  
@@ -17,10 +17,10 @@ Deployed to: [boost.wax](https://wax.bloks.io/account/boost.wax)
    
     Note: your contract must have a permission called **paybw**, and it must be linked to the **boost.wax**#**noop** action. Furthermore, it must have a 1 of 1 authority usuing the account@permission `boost.wax@paybw`. As an example see the [test.wax@paybw permission](https://wax.bloks.io/account/test.wax#keys). When the free tier is exceeded, the WAX backend will sign for your users using this permission if you have sufficient CPU and Net allocated to your contract's account.
    
-* **dereg(name contract)**: 
+* **[dereg(name contract)](https://wax.bloks.io/account/boost.wax?loadContract=true&tab=Tables&account=boost.wax&scope=boost.wax&limit=100&action=dereg)**: 
    Deregister your contract from bandwidth management.  
    
-* **noop()**: 
+* **[noop()](https://wax.bloks.io/account/boost.wax?loadContract=true&tab=Tables&account=boost.wax&scope=boost.wax&limit=100&action=noop)**: 
    No-op action inserted into WAX Cloud Wallet transactions that satisfy bandwidth management crtieria.  
 
 * **boost(name from, name to, asset cpu, asset net)**: *Deprecated*
@@ -30,4 +30,4 @@ Deployed to: [boost.wax](https://wax.bloks.io/account/boost.wax)
 
 ## Bandwidth Management
 
-WAX will give every user 5ms of free CPU and 5000 words of free Net over a rolling 24 hour period. Also, all contracts are individually confined to a maximum of 50s of free bandwidth over a 24 hour period (this 50s quota will likely change as chain demand fluctuates). If either of those run out within the 24 hour period it will be up to the contract to pay for bandwidth (the purpose of this registration contract), and after that, it will be up to the user's own resources. By registering your contract here, permissioning it as described above, and adding CPU and Net to your contract, WAX will automatically begin signing noop transactions with your account so as to conveniently use your contract's CPU and Net to cover the cost for your users. Realize that WAX will only utilize your contract's resources once the free tier runs out for your user or your contract.
+WAX will give every user 5ms of free CPU and 5000 words of free Net over a rolling 24 hour period. Also, all contracts are individually confined to a maximum of 5s of free bandwidth over a 24 hour period (this 50s quota will likely change as chain demand fluctuates). If either of those run out within the 24 hour period it will be up to the contract to pay for bandwidth (the purpose of this registration contract), and after that, it will be up to the user's own resources. By registering your contract here, permissioning it as described above, and adding CPU and Net to your contract, WAX will automatically begin signing noop transactions with your account so as to conveniently use your contract's CPU and Net to cover the cost for your users. Realize that WAX will only utilize your contract's resources once the free tier runs out for your user or your contract.
