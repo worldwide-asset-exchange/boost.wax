@@ -19,7 +19,7 @@ ACTION booster::reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_
       rec.net_words_per_user = net_words_per_user;
       rec.use_allow_list = use_allow_list;
       rec.allowed_contracts = allowed_contracts;
-    });    
+    });
   }
 }
 
@@ -27,6 +27,12 @@ ACTION booster::dereg(name contract) {
   contracts_table _contracts(get_self(), get_self().value);
   auto _contract = _contracts.require_find(contract.value, "contract not found");
   _contracts.erase(_contract);
+}
+
+ACTION boster::boostram(name from, name to, uint64_t bytes) {
+  require_auth(get_self());
+
+  
 }
 
 ACTION booster::boosterdel (name booster) {
@@ -40,20 +46,20 @@ ACTION booster::boosterdel (name booster) {
 
 ACTION booster::boost(name from, name to, asset cpu, asset net) {
   // if (!can_boost(from)) return;
-  // 
+  //
   // boosts_table _boosts(get_self(), get_self().value);
   // auto itr = _boosts.find(to.value);
-  // 
+  //
   // if(itr != _boosts.end()) return;
-  // 
+  //
   // // not yet boosted
-  // 
+  //
   // check(cpu.symbol == STAKE_SYMBOL, "invalid cpu symbol");
   // check(net.symbol == STAKE_SYMBOL, "invalid net symbol");
-  // 
+  //
   // if (cpu.amount > 2500000000) cpu.amount = 2500000000;
   // if (net.amount > 1000000000) net.amount = 1000000000;
-  // 
+  //
   // _boosts.emplace(get_self(), [&](auto& msg) {
   //     msg.user = to;
   //     msg.requester = from;
@@ -61,7 +67,7 @@ ACTION booster::boost(name from, name to, asset cpu, asset net) {
   //     msg.amount_net = net;
   //     msg.time = get_time();
   // });
-  // 
+  //
   // stake(to, cpu, net);
 }
 
@@ -86,7 +92,7 @@ ACTION booster::updateboost(name from, name to, asset cpu_to, asset net_to) {
   check(net_to.symbol == STAKE_SYMBOL, "invalid net symbol");
 
   asset NO_WAX = asset(0, STAKE_SYMBOL);
-  
+
   if (cpu_to.amount > 2500000000) cpu_to.amount = 2500000000;
   if (net_to.amount > 1000000000) net_to.amount = 1000000000;
 
@@ -128,7 +134,7 @@ void booster::stake(name to, asset cpu, asset net) {
   stakeargs args;
 
   args.from = get_self();
-  args.receiver = to;  
+  args.receiver = to;
   args.stake_cpu_quantity = cpu;
   args.stake_net_quantity = net;
   args.transfer = false;
@@ -146,7 +152,7 @@ void booster::unstake(name to, asset cpu, asset net) {
   unstakeargs args;
 
   args.from = get_self();
-  args.receiver = to;  
+  args.receiver = to;
   args.unstake_cpu_quantity = cpu;
   args.unstake_net_quantity = net;
 

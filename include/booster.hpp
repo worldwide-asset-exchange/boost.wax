@@ -7,6 +7,7 @@ using namespace std;
 using namespace eosio;
 
 static const symbol STAKE_SYMBOL = symbol("WAX", 8);
+static const uint64_t MAX_RAM_BOOST = 4096 - 1611;
 
 CONTRACT booster : public contract {
   public:
@@ -23,6 +24,7 @@ CONTRACT booster : public contract {
     ACTION dereg(name contract);
 
     ACTION noop() {};
+    ACTION boostram(name from, name to, uint64_t bytes);
 
     struct stakeargs {
       name from;
@@ -41,7 +43,7 @@ CONTRACT booster : public contract {
 
     void stake(name to, asset cpu, asset net);
     void unstake(name to, asset cpu, asset net);
-    
+
     bool can_boost(name booster);
     uint64_t get_time();
 
@@ -68,7 +70,16 @@ CONTRACT booster : public contract {
       uint64_t      net_words_per_user;
       bool          use_allow_list;
       vector<name>  allowed_contracts;
+      bool          allow_ram_boosts;
       auto primary_key() const { return contract.value; }
     };
     typedef multi_index<name("contracts"), contracts> contracts_table;
+
+    // ramboosts are scoped buy buyer account
+    TABLE ramboosts {
+      name     user;
+      uint64_t bytes;
+      auto  primary_key() const { return user.value; }
+    };
+    typedef multi_index<name("ramboosts"), boosts> boosts_table;
 };
