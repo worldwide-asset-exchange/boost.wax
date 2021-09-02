@@ -31,6 +31,9 @@ Both dApp Boost Resource Pool Tier and User Boost Resource Pool Tier must have r
 
 This boost system allows for controlled resource metering, ensuring that each user has a necessary resource baseline enabling them to participate in NFT based activities like pack drops, pack opening, crafting, NFT buying and selling, and trading regardless of the current resource cost on the network.
 
+### RAM Boost
+
+WCW creates new accounts with the bare minimum RAM to successfully create each account. So that users can still execute transactions requiring RAM, WCW boosts RAM for any transaction that is successfully boosted for bandwidth under any of the boosting tiers. Currently WAX will fund up to 4096 bytes total account RAM including that required for account creation for any of these transactions. In the future, RAM boosts will be paid by the relevant dApps if a transaction does not qualify for boosting under the WAX paid/user boost tier.
 
 ## API
 
