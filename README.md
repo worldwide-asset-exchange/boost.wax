@@ -33,7 +33,7 @@ This boost system allows for controlled resource metering, ensuring that each us
 
 ### RAM Boost
 
-WCW creates new accounts with the bare minimum RAM to successfully create each account. So that users can still execute transactions requiring RAM, WCW boosts RAM for any transaction that is successfully boosted for bandwidth under any of the boosting tiers. Currently WAX will fund up to 4096 bytes total account RAM including that required for account creation for any of these transactions. In the future, RAM boosts will be paid by the relevant dApps if a transaction does not qualify for boosting under the WAX paid/user boost tier.
+WCW creates new accounts with the bare minimum RAM to successfully create each account. So that users can still execute transactions requiring RAM, WCW boosts RAM for any transaction that is successfully boosted for bandwidth under the paid by WAX tier. Currently WAX will fund up to 4096 bytes total account RAM including that required for account creation for any of these transactions. In the future, RAM boosts will available for the dApp paid tiers which will be paid by the relevant dApps if a transaction does not qualify for boosting under the WAX paid/user boost tier.
 
 ## API
 
