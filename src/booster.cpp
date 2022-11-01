@@ -24,6 +24,8 @@ ACTION booster::reg(name contract, uint64_t cpu_us_per_user, uint64_t net_words_
 }
 
 ACTION booster::dereg(name contract) {
+  require_auth(contract);
+
   contracts_table _contracts(get_self(), get_self().value);
   auto _contract = _contracts.require_find(contract.value, "contract not found");
   _contracts.erase(_contract);
